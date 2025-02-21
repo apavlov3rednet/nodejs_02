@@ -9,6 +9,8 @@ const PORT = process.env.PORT || 3000;
  * R - get
  * U - put
  * D - delete
+ * 
+ * use - middleware
  */
 app.get('/', (req, res) => { //requrest, response
     // console.log(req); //Объект запроса
