@@ -1,14 +1,19 @@
 //Подключаем модуль файловой системы
-import fs from "node:fs";
-import { ArrayTools } from "./array.js";
+const fs = require('fs').promises;
+const ArrayTools = require("./array.js");
 
 //Создаем и экспортируем класс Хранилища
-export class Storage {
+class Storage {
     #dir = '/storage/';  //private
 
     constructor(fileDir = '') {
         if (fileDir != "") this.#dir = this.#dir + fileDir + "/"; 
         // /storage/users/
+    }
+
+    #prepareFilePath(fileName) {
+        //current wild directory C:/OSPanel/home/nodejs_02/
+        return process.cwd() + this.#dir + fileName + '.json';
     }
 
     #writeToFile(nameFile, content) {
@@ -35,34 +40,21 @@ export class Storage {
             return false;
         }
 
-        const nameFile = this.#dir + fileName + '.json'; //создаем путь файла
+        const nameFile = this.#prepareFilePath(fileName); //создаем путь файла
         const content = JSON.stringify(jsonData); // s:{0:'name'}
         return this.#writeToFile(nameFile, content);
     }
     
     //Удаление файла
     deleteFile(fileName) {
-        const nameFile = this.#dir + fileName + '.json';
+        const nameFile = this.#prepareFilePath(fileName);
         fs.unlink(nameFile);
     }
 
     //Чтение из файла
-    readFile(fileName) {
-        const nameFile = this.#dir + fileName + '.json';
-        fs.readFile(nameFile, 'utf8', (err, data) => {
-            if(err) {
-                console.error('Error: ' + err);
-                return false;
-            }
-            else {
-                try {
-                    return JSON.parse(data);
-                } catch (parseErr) {
-                    console.error('Ошибка при разборе JSON данных:', parseErr);
-                    return false;
-                }
-            }
-        });
+    async readFile(fileName) {
+        const nameFile = this.#prepareFilePath(fileName);
+        return await fs.readFile(nameFile, 'utf8');
     }
 
     findFile(fileName) {
@@ -73,12 +65,12 @@ export class Storage {
         );
     }
 
-    updateFile(fileName, content) {
+    async updateFile(fileName, content) {
         const filePath = this.#dir + fileName + '.json';
         //1. Найти есть ли такой файл
         if(this.findFile(filePath)) {
             //2. Считать содержимое файла
-            let oldContent = this.readFile(filePath); //array
+            let oldContent = await this.readFile(filePath); //array
             //3. Обновить содержимое файла с обновлением
             let newContent = ArrayTools.array_merge(oldContent, content);
             return this.#writeToFile(filePath, newContent);
@@ -89,3 +81,5 @@ export class Storage {
         }
     }
 }
+
+module.exports = Storage;

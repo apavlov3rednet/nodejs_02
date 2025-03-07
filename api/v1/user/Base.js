@@ -1,6 +1,6 @@
-import { Storage } from "../../services/storage.js";
+const Storage = require("../../services/storage.js");
 
-export class Base {
+class Base {
     constructor(params = {}) {
 
     }
@@ -9,3 +9,5 @@ export class Base {
         
     }
 }
+
+module.exports = Base;

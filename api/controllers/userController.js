@@ -1,17 +1,20 @@
-import { Access } from "../v1/user/Access.js";
-import { Base } from "../v1/user/Base.js";
+const Access = require("../v1/user/Access.js");
+const Base  = require("../v1/user/Base.js");
 
 // @static class
-export class userController {
+class userController {
     static getAllUsers(req) {
-        let paramsRequest = req.params; //тело запроса ?test=y
+        let paramsRequest = req.params; //тело get запроса ?test=y
         let headerRequest = req.headers; //заголовки запроса
+        let bodyRequest = req.body; //тело post запроса
         
         if(Access.checkClientAccess(headerRequest)) {
             //Идем дальше в версию и получаем нужные данные
             let reqUser = new Base(paramsRequest);
             return reqUser.list();
         }
-        else return {error: 'not access'};
+        else return JSON.stringify({error: 'not access'});
     }
 }
+
+module.exports = userController;

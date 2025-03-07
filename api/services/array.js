@@ -1,4 +1,4 @@
-export class ArrayTools {
+class ArrayTools {
   //Объединяет два массива с проверкой на уникальность
   static array_merge(array1, array2) {
     return [...new Set([...array1, ...array2])];
@@ -11,3 +11,5 @@ export class ArrayTools {
     return [...difference1, ...difference2];
   }
 }
+
+module.exports = ArrayTools;
