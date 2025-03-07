@@ -1,6 +1,6 @@
 //Подключаем модуль файловой системы
 import fs from "node:fs";
-import { ArrayTools } from "./array";
+import { ArrayTools } from "./array.js";
 
 //Создаем и экспортируем класс Хранилища
 export class Storage {

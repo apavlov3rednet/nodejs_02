@@ -1,4 +1,5 @@
 import express from 'express';
+import v1Router from './api/v1/routes/index.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,9 +22,10 @@ app.get('/', (req, res) => { //requrest, response
 /**
  * 1.0.5.1000
  */
-app.get('/api/', (req, res) => {
-    res.send("<h2>API</h2>");
-});
+app.get('/api/v1/', v1Router);
+app.post('/api/v1/', v1Router);
+app.put('/api/v1/', v1Router);
+app.delete('/api/v1/', v1Router);
 
 app.listen(PORT, () => {
     console.log(`API is listening on port ${PORT}`);
