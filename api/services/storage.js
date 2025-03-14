@@ -11,9 +11,21 @@ class Storage {
         // /storage/users/
     }
 
-    #prepareFilePath(fileName) {
+    async getSHA256Hash(str) {
+        const buf = new TextEncoder().encode(str);
+        const digest = await crypto.subtle.digest('SHA-256', buf);
+        return Array.from(new Uint8Array(digest))
+          .map(b => b.toString(16).padStart(2, '0'))
+          .join('');
+      }
+
+    #prepareFilePath(fileName, ext = true) {
         //current wild directory C:/OSPanel/home/nodejs_02/
-        return process.cwd() + this.#dir + fileName + '.json';
+        //let protectedName = await this.getSHA256Hash(fileName + 'salt');
+        // path.join(process.cwd(), this.#dir, fileName+extFile)
+
+        let extFile = (ext) ? '.json' : '';
+        return process.cwd() + this.#dir + fileName + extFile;
     }
 
     #writeToFile(nameFile, content) {
@@ -51,30 +63,28 @@ class Storage {
         fs.unlink(nameFile);
     }
 
-    getAllFiles() {
+    async getAllFiles() {
         //искомая директория
         let dir = process.cwd() + this.#dir;
         //результируйщий объект
-        let dataResult = {};
+        let dataResult = [];
 
-        fs.readdir(dir, (err, files) => { //читаем директорию ищем все файлы
-            if(err) {
-                return console.error(err);
-            }
-            else {
-                files.forEach(async (file, index) => { 
-                    //читаем каждый файл и записываем в результирующий объект
-                    dataResult[index] = await this.readFile(file);
-                });
-            }
+        let files = await fs.readdir(dir);
+
+        files.forEach(async (file, index) => { 
+            //читаем каждый файл и записываем в результирующий объект
+            let content = await this.readFile(file, false);
+            dataResult.push(content);
         });
 
+        console.log(dataResult)
         return dataResult;
     }
 
     //Чтение из файла
-    async readFile(fileName) {
-        const nameFile = this.#prepareFilePath(fileName);
+    async readFile(fileName, ext = true) {
+        const nameFile = this.#prepareFilePath(fileName, ext);
+        console.log(nameFile)
         return await fs.readFile(nameFile, 'utf8');
     }
 

@@ -15,6 +15,14 @@ class userController {
         }
         else return JSON.stringify({error: 'not access'});
     }
+
+    static getByLogin(login) {
+        if(login === '')
+            return console.error('Login must be isset');
+
+        let reqUser = new Base();
+        return reqUser.getByFileName(login);
+    }
 }
 
 module.exports = userController;
