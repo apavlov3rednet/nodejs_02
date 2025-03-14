@@ -11,7 +11,7 @@ class userController {
         if(Access.checkClientAccess(headerRequest)) {
             //Идем дальше в версию и получаем нужные данные
             let reqUser = new Base(paramsRequest);
-            return reqUser.list();
+            return reqUser.getUserList();
         }
         else return JSON.stringify({error: 'not access'});
     }

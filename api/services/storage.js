@@ -51,6 +51,27 @@ class Storage {
         fs.unlink(nameFile);
     }
 
+    getAllFiles() {
+        //искомая директория
+        let dir = process.cwd() + this.#dir;
+        //результируйщий объект
+        let dataResult = {};
+
+        fs.readdir(dir, (err, files) => { //читаем директорию ищем все файлы
+            if(err) {
+                return console.error(err);
+            }
+            else {
+                files.forEach(async (file, index) => { 
+                    //читаем каждый файл и записываем в результирующий объект
+                    dataResult[index] = await this.readFile(file);
+                });
+            }
+        });
+
+        return dataResult;
+    }
+
     //Чтение из файла
     async readFile(fileName) {
         const nameFile = this.#prepareFilePath(fileName);
