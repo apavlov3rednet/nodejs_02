@@ -1,5 +1,6 @@
 //Подключаем модуль файловой системы
 const fs = require('fs').promises;
+const path = require('path');
 const ArrayTools = require("./array.js");
 
 //Создаем и экспортируем класс Хранилища
@@ -11,21 +12,12 @@ class Storage {
         // /storage/users/
     }
 
-    async getSHA256Hash(str) {
-        const buf = new TextEncoder().encode(str);
-        const digest = await crypto.subtle.digest('SHA-256', buf);
-        return Array.from(new Uint8Array(digest))
-          .map(b => b.toString(16).padStart(2, '0'))
-          .join('');
-      }
-
     #prepareFilePath(fileName, ext = true) {
         //current wild directory C:/OSPanel/home/nodejs_02/
         //let protectedName = await this.getSHA256Hash(fileName + 'salt');
-        // path.join(process.cwd(), this.#dir, fileName+extFile)
 
         let extFile = (ext) ? '.json' : '';
-        return process.cwd() + this.#dir + fileName + extFile;
+        return path.join(process.cwd(), this.#dir, fileName + extFile);
     }
 
     #writeToFile(nameFile, content) {
@@ -84,7 +76,6 @@ class Storage {
     //Чтение из файла
     async readFile(fileName, ext = true) {
         const nameFile = this.#prepareFilePath(fileName, ext);
-        console.log(nameFile)
         return await fs.readFile(nameFile, 'utf8');
     }
 

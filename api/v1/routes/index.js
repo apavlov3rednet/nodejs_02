@@ -15,9 +15,19 @@ router.route('/user/:id/').get(async (req, res) => {
     res.send(result);
 });
 
-router.route('/user/').post((req, res) => {}); //создаем пользователя
-router.route('/user/:id/').put((req, res) => {}); //обновляем пользователя по ID
-router.route('/user/:id/').delete((req, res) => {}); //Удаляем пользователя по ID
+//создаем пользователя
+router.route('/user/').post(async (req, res) => {
+    let result = await userController.createUser(req, res);
+    res.send(result);
+}); 
+
+ //обновляем пользователя по ID
+router.route('/user/:id/').put((req, res) => {});
+
+ //Удаляем пользователя по ID
+router.route('/user/:id/').delete(async (req, res) => {
+    let result = await userController.dropUser(req.params.id);
+});
 
 //Дома сделать для task, group, project
 router.route('/task/').get((req, res) => {});

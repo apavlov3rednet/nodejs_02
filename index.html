@@ -14,5 +14,27 @@
 
       <input type="submit" value="Отправить">
     </form>
+
+    <hr>
+
+    <form action="http://localhost:3000/api/v1/user/">
+      <input type="text" name="login">
+      <button id="submit" onclick="drop(this); return false;">Отправить</button>
+    </form>
+
+    <script>
+      async function drop(obButton) {
+        const form = obButton.form;
+        const id = form.querySelector('input').value;
+        const url = form.getAttribute('action') + id + '/';
+
+        const result = await fetch(url, {
+          method: "DELETE",
+          headers: {
+            
+          }
+        });
+      }
+    </script>
   </body>
 </html>

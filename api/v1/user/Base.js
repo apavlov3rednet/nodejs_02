@@ -12,6 +12,18 @@ class Base {
     async getByFileName(login) {
         return await this.user.readFile(login);
     }
+
+    async set(arr) {
+        if(arr.length === 0)
+            return;
+
+        let fileName = String(arr.login).trim();
+        return this.user.createFile(fileName, arr);
+    }
+
+    async drop(login) {
+        return await this.user.deleteFile(login);
+    }
 }
 
 module.exports = Base;

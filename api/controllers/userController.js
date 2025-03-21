@@ -23,6 +23,16 @@ class userController {
         let reqUser = new Base();
         return reqUser.getByFileName(login);
     }
+
+    static createUser(req, res) {
+        let reqUser = new Base();
+        return reqUser.set(req.body);
+    }
+
+    static dropUser(login) {
+        let reqUser = new Base();
+        return reqUser.drop(login);
+    }
 }
 
 module.exports = userController;

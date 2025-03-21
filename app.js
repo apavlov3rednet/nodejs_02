@@ -1,11 +1,18 @@
-const express = require('express');
-const bodyParser = require('body-parser'); //разбирает тело запроса
+const express = require('express'); //axios - аналог
+const cors = require('cors'); //cross-origin request to server
+//const bodyParser = require('body-parser'); //разбирает тело запроса
 const v1Router = require('./api/v1/routes');
 
-const app = express();
+const app = express(); // app = axios();
 const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.json()); //bodyParser / .raw/.json/.text/.array
+app.use(cors({
+    origin: "http://127.0.0.1:5500", // http://localhost:5500
+    methods: ['POST', 'GET', 'PUT', 'DELETE']
+}));
+
+app.use(express.urlencoded({ extended : true}));
+//app.use(bodyParser.json()); //bodyParser / .raw/.json/.text/.array
 
 app.use((req, res, next) => {
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
