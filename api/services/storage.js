@@ -2,22 +2,23 @@
 const fs = require('fs').promises;
 const path = require('path');
 const ArrayTools = require("./array.js");
+const Secure = require('../services/secure.js');
 
 //Создаем и экспортируем класс Хранилища
 class Storage {
     #dir = '/storage/';  //private
 
     constructor(fileDir = '') {
+        this.ob = fileDir;
         if (fileDir != "") this.#dir = this.#dir + fileDir + "/"; 
         // /storage/users/
     }
 
     #prepareFilePath(fileName, ext = true) {
-        //current wild directory C:/OSPanel/home/nodejs_02/
-        //let protectedName = await this.getSHA256Hash(fileName + 'salt');
-
+        const secure = new Secure('md5');
+        const newFileName = secure.protectPassword(fileName);
         let extFile = (ext) ? '.json' : '';
-        return path.join(process.cwd(), this.#dir, fileName + extFile);
+        return path.join(process.cwd(), this.#dir, newFileName + extFile);
     }
 
     #writeToFile(nameFile, content) {
@@ -42,6 +43,11 @@ class Storage {
         //Отменяем создание если данных нехватает
         if(!fileName || !jsonData) {
             return false;
+        }
+
+        if(this.ob === 'user') {
+            const secure = new Secure();
+            jsonData.password = secure.protectPassword(jsonData.password);
         }
 
         const nameFile = this.#prepareFilePath(fileName); //создаем путь файла
