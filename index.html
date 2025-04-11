@@ -12,27 +12,79 @@
       <label><span>mail</span><input type="text" name="email" /></label>
       <label><span>phone</span><input type="text" name="phone" /></label>
 
-      <input type="submit" value="Отправить">
+      <div>
+        Rules:<br>
+        <label>admin: <input type="checkbox" name="group[]" value="admin"/></label>
+        <label>manager: <input type="checkbox"  name="group[]" value="manager"/></label>
+        <label>observer: <input type="checkbox"  name="group[]" value="observer"/></label>
+        <label>user: <input type="checkbox"  name="group[]" value="user"/></label>
+      </div>
+
+      <input type="submit" value="Отправить" />
     </form>
 
-    <hr>
+    <hr />
 
     <form action="http://localhost:3000/api/v1/user/">
-      <input type="text" name="login">
+      <input type="text" name="login" />
       <button id="submit" onclick="drop(this); return false;">Отправить</button>
+    </form>
+
+    <hr />
+
+    <form action="http://localhost:3000/api/v1/group/" method="POST">
+      group name: <input type="text" name="name" />
+
+      <table>
+        <tr>
+          <th></th>
+          <th>group</th>
+          <th>user</th>
+          <th>project</th>
+          <th>task</th>
+        </tr>
+
+        <tr>
+          <td>create</td>
+          <td><input type="checkbox" value="Y" name="role[group][c]" /></td>
+          <td><input type="checkbox" value="Y" name="role[user][c]" /></td>
+          <td><input type="checkbox" value="Y" name="role[project][c]" /></td>
+          <td><input type="checkbox" value="Y" name="role[task][c]" /></td>
+        </tr>
+        <tr>
+          <td>read</td>
+          <td><input type="checkbox" value="Y" name="role[group][r]" /></td>
+          <td><input type="checkbox" value="Y" name="role[user][r]" /></td>
+          <td><input type="checkbox" value="Y" name="role[project][r]" /></td>
+          <td><input type="checkbox" value="Y" name="role[task][r]" /></td>
+        </tr>
+        <tr>
+          <td>update</td>
+          <td><input type="checkbox" value="Y" name="role[group][u]" /></td>
+          <td><input type="checkbox" value="Y" name="role[user][u]" /></td>
+          <td><input type="checkbox" value="Y" name="role[project][u]" /></td>
+          <td><input type="checkbox" value="Y" name="role[task][u]" /></td>
+        </tr>
+        <tr>
+          <td>delete</td>
+          <td><input type="checkbox" value="Y" name="role[group][d]" /></td>
+          <td><input type="checkbox" value="Y" name="role[user][d]" /></td>
+          <td><input type="checkbox" value="Y" name="role[project][d]" /></td>
+          <td><input type="checkbox" value="Y" name="role[task][d]" /></td>
+        </tr>
+      </table>
+      <input type="submit" value="send" />
     </form>
 
     <script>
       async function drop(obButton) {
         const form = obButton.form;
-        const id = form.querySelector('input').value;
-        const url = form.getAttribute('action') + id + '/';
+        const id = form.querySelector("input").value;
+        const url = form.getAttribute("action") + id + "/";
 
         const result = await fetch(url, {
           method: "DELETE",
-          headers: {
-            
-          }
+          headers: {},
         });
       }
     </script>

@@ -1,0 +1,8 @@
+{
+  "name": "manager",
+  "role": {
+    "user": { "c": "Y" },
+    "project": { "r": "Y", "u": "Y" },
+    "task": { "d": "Y" }
+  }
+}

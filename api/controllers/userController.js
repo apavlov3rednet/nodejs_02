@@ -1,37 +1,36 @@
-const Access = require("../v1/user/Access.js");
-const Base  = require("../v1/user/Base.js");
+const Helper = require('../services/helper.js');
 
-// @static class
 class userController {
-    static getAllUsers(req) {
-        let paramsRequest = req.params; //тело get запроса ?test=y
-        let headerRequest = req.headers; //заголовки запроса
-        let bodyRequest = req.body; //тело post запроса
-        
-        if(Access.checkClientAccess(headerRequest)) {
-            //Идем дальше в версию и получаем нужные данные
-            let reqUser = new Base(paramsRequest);
-            return reqUser.getUserList();
+
+    constructor(req, res) {
+        this.req = req;
+        this.res = res;
+        this.version = Helper.getCurVersion(req);
+        this.Access = require('../' + this.version + '/user/Access.js');
+        this.Base = require('../' + this.version + '/user/Base.js');
+        this.reqUser = new this.Base(this.req.params);
+    }
+
+    async getAllUsers() {        
+        if(Access.checkClientAccess(this.req.headers)) {
+            return await this.reqUser.getUserList();
         }
         else return JSON.stringify({error: 'not access'});
     }
 
-    static getByLogin(login) {
+    async getByLogin(login) {
         if(login === '')
             return console.error('Login must be isset');
 
-        let reqUser = new Base();
-        return reqUser.getByFileName(login);
+        return await this.reqUser.getByFileName(login);
     }
 
-    static createUser(req, res) {
-        let reqUser = new Base();
-        return reqUser.set(req.body);
+    async createUser() {
+        return this.reqUser.set(this.req.body);
     }
 
-    static dropUser(login) {
-        let reqUser = new Base();
-        return reqUser.drop(login);
+    dropUser(login) {
+        return this.reqUser.drop(login);
     }
 }
 
