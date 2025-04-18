@@ -1,8 +1,1 @@
-{
-  "name": "manager",
-  "role": {
-    "user": { "c": "Y" },
-    "project": { "r": "Y", "u": "Y" },
-    "task": { "d": "Y" }
-  }
-}
+{"name":"manager","role":{"user":{"c":"Y","r":"Y","u":"Y","d":"Y"},"project":{"c":"Y","r":"Y","u":"Y","d":"Y"},"task":{"c":"Y","r":"Y","u":"Y","d":"Y"}}}

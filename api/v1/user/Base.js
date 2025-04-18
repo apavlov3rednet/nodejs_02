@@ -1,4 +1,5 @@
 const Storage = require("../../services/storage.js");
+const Group = require('../group/Base.js');
 
 class Base {
     constructor(params = {}) {
@@ -10,7 +11,12 @@ class Base {
     }
 
     async getByFileName(login) {
-        return await this.user.readFile(login);
+        let user = JSON.parse(await this.user.readFile(login));
+        let group = new Group();
+
+        user.matrix = await group.getMatrix(user.group);
+        user.roles = await group.getAllRoles(user.matrix);
+        return user;
     }
 
     async set(arr) {
