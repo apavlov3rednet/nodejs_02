@@ -7,9 +7,9 @@ const router = express.Router();
 
 //Пользователь
 // получаем всех пользователей
-router.route('/user/').get((req, res) => {
+router.route('/user/').get(async (req, res) => {
     let user = new userController(req, res);
-    let result = user.getAllUsers(req);
+    let result = await user.getAllUsers(req);
     res.send(result);
 });
 

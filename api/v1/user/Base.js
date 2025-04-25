@@ -6,8 +6,8 @@ class Base {
         this.user = new Storage('user');
     }
 
-    getUserList(count = 100, offset = 0) {
-        return this.user.getAllFiles();
+    async getUserList(count = 100, offset = 0) {
+        return await this.user.getAllFiles();
     }
 
     async getByFileName(login) {
