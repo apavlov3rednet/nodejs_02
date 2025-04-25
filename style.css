@@ -1,0 +1,1 @@
+form{padding:20px;display:flex;flex-wrap:wrap;margin:20px;border:1px solid #eee;width:800px}form h3{display:block;width:100%}form label{width:25%}form label span{display:block}form #rulesList{display:flex;width:100%}form #rulesList label{display:block;width:20%}form #rulesList label span{display:inline-block;margin-left:5px}

@@ -1,0 +1,34 @@
+form {
+    padding: 20px;
+    display:flex;
+    flex-wrap:wrap;
+    margin:20px;
+    border:1px solid #eee;
+    width: 800px;
+
+    h3 {
+        display:block;
+        width:100%;
+    }
+
+    label {
+        width:25%;
+        span {
+            display:block;
+        }
+    }
+
+    #rulesList {
+        display:flex;
+        width:100%;
+
+        label {
+            display:block;
+            width:20%;
+            span {
+                display: inline-block;
+                margin-left:5px;
+            }
+        }
+    }
+}

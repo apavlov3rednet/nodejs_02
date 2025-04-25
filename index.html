@@ -4,20 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
     <form action="http://localhost:3000/api/v1/user/" method="POST">
+      <h3>Создание пользователя</h3>
+
       <label><span>login</span><input type="text" name="login" /></label>
       <label><span>pass</span><input type="text" name="password" /></label>
       <label><span>mail</span><input type="text" name="email" /></label>
       <label><span>phone</span><input type="text" name="phone" /></label>
 
-      <div>
-        Rules:<br>
-        <label>admin: <input type="checkbox" name="group[]" value="admin"/></label>
-        <label>manager: <input type="checkbox"  name="group[]" value="manager"/></label>
-        <label>observer: <input type="checkbox"  name="group[]" value="observer"/></label>
-        <label>user: <input type="checkbox"  name="group[]" value="user"/></label>
+      <h4>Rules:</h4>
+      <div id="rulesList">
+        <label
+          >admin: <input type="checkbox" name="group[]" value="admin"
+        /></label>
       </div>
 
       <input type="submit" value="Отправить" />
@@ -76,6 +78,13 @@
       <input type="submit" value="send" />
     </form>
 
+    <form action="http://localhost:3000/api/v1/project" method="POST">
+      <!-- 
+      1. Стандартные поля: Название проекта, Дата начала, Дата окончания, Теги
+      2. Динамические поля: Руководитель проекта - получить список пользователей
+      -->
+    </form>
+
     <script>
       async function drop(obButton) {
         const form = obButton.form;
@@ -87,6 +96,36 @@
           headers: {},
         });
       }
+
+      async function getGroups() {
+        const result = await fetch("http://localhost:3000/api/v1/group/", {
+          method: "GET",
+        });
+        let body = await result.json();
+
+        if (body.length == 0) return false;
+
+        let container = document.getElementById("rulesList");
+        container.innerHTML = "";
+
+        body.forEach((item) => {
+          let element = document.createElement("label");
+          let input = document.createElement("input");
+          let span = document.createElement("span");
+
+          span.innerText = item.name;
+          input.setAttribute("type", "checkbox");
+          input.setAttribute("name", "group[]");
+          input.value = item.name;
+
+          element.appendChild(input);
+          element.appendChild(span);
+
+          container.appendChild(element);
+        });
+      }
+
+      getGroups();
     </script>
   </body>
 </html>

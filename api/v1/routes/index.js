@@ -1,6 +1,7 @@
 const express = require('express');
 const userController = require('../../controllers/userController.js');
 const groupController = require('../../controllers/groupController.js');
+const projectController = require('../../controllers/projectController.js');
 
 const router = express.Router();
 
@@ -39,9 +40,9 @@ router.route('/user/:id/').delete(async (req, res) => {
 
 //Группа
 // получаем все группы
-router.route('/group/').get((req, res) => {
+router.route('/group/').get(async (req, res) => {
     let group = new groupController(req, res);
-    let result = group.getAllGroups(req);
+    let result = await group.getAllGroups(req);
     res.send(result);
 });
 
@@ -68,6 +69,39 @@ router.route('/group/:id/').put((req, res) => {
 router.route('/group/:id/').delete(async (req, res) => {
     let group = new groupController(req, res);
     let result = await group.dropGroup(req.params.id);
+});
+
+//Проекты
+// получаем все группы
+router.route('/project/').get(async (req, res) => {
+    let project = new projectController(req, res);
+    let result = await project.getAllProjects(req);
+    res.send(result);
+});
+
+ //получаем группу по ID
+router.route('/project/:id/').get(async (req, res) => {
+    let project = new projectController(req, res);
+    let result = await project.getByName(req.params.id);
+    res.send(result);
+});
+
+//создаем группу
+router.route('/project/').post(async (req, res) => {
+    let project = new projectController(req, res);
+    let result = await project.createProject(req, res);
+    res.send(result);
+}); 
+
+ //обновляем группу по ID
+router.route('/project/:id/').put((req, res) => {
+    let project = new projectController(req, res);
+});
+
+ //Удаляем группу по ID
+router.route('/project/:id/').delete(async (req, res) => {
+    let project = new projectController(req, res);
+    let result = await project.dropProject(req.params.id);
 });
 
 

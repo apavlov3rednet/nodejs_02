@@ -52,6 +52,7 @@ class Storage {
 
         const nameFile = this.#prepareFilePath(fileName); //создаем путь файла
         const content = JSON.stringify(jsonData); // s:{0:'name'}
+
         return this.#writeToFile(nameFile, content);
     }
     
@@ -65,18 +66,29 @@ class Storage {
         //искомая директория
         let dir = process.cwd() + this.#dir;
         //результируйщий объект
-        let dataResult = [];
 
         let files = await fs.readdir(dir);
 
-        files.forEach(async (file, index) => { 
-            //читаем каждый файл и записываем в результирующий объект
-            let content = await this.readFile(file, false);
-            dataResult.push(content);
-        });
+        let arPromises = [];
 
-        console.log(dataResult)
-        return dataResult;
+        arPromises = files.map(async file => {
+            try {
+                return JSON.parse(await fs.readFile(dir + file, 'utf8'));
+            }
+            catch(error) {
+                return error;
+            }
+        }); 
+        
+        try {
+            //не более 100 файлов за 1 пакет
+            const arResult = await Promise.all(arPromises); 
+            return arResult;
+        }
+        catch(error) {
+            console.error(`Error processing group ${groupName}:`, error);
+            throw error;
+        }
     }
 
     //Чтение из файла
