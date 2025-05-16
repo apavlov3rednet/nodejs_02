@@ -83,9 +83,47 @@
       1. Стандартные поля: Название проекта, Дата начала, Дата окончания, Теги
       2. Динамические поля: Руководитель проекта - получить список пользователей
       -->
+      <label><span>Name</span><input type="text" name="name" /></label>
+      <label><span>Start</span><input type="date" name="start" /></label>
+      <label><span>Finish</span><input type="date" name="finish" /></label>
+      <label><span>Tags</span><input type="text" name="tags" /></label>
+
+      <label>
+        <span>Owner</span>
+        <select name="owner" id="ownerField"></select>
+      </label>
+
+      <label for="">
+        <span>Command</span>
+        <select name="command" id="commandField" multiple></select>
+      </label>
+
+      <input type="submit" value="send" />
     </form>
 
     <script>
+      async function getUsers() {
+        let obOwner = document.getElementById('ownerField');
+        let obCommand = document.getElementById('commandField');
+        const result = await fetch("http://localhost:3000/api/v1/user/", {
+          method: "GET",
+        });
+        let body = await result.json();
+        if (body.length == 0) return false;
+
+        body.forEach(item => {
+          let option = document.createElement('option');
+          option.value = item.login;
+          option.innerText = item.login;
+
+          obOwner.appendChild(option.cloneNode(true));
+          obCommand.appendChild(option.cloneNode(true)); 
+        });
+      }
+
+      getUsers();
+
+
       async function drop(obButton) {
         const form = obButton.form;
         const id = form.querySelector("input").value;

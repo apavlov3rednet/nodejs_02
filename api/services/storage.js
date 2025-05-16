@@ -18,6 +18,8 @@ class Storage {
         const secure = new Secure('md5');
         const newFileName = secure.protectPassword(fileName);
         let extFile = (ext) ? '.json' : '';
+
+        fs.mkdir(path.join(process.cwd(), this.#dir), {recursive: true});
         return path.join(process.cwd(), this.#dir, newFileName + extFile);
     }
 
@@ -62,7 +64,7 @@ class Storage {
         fs.unlink(nameFile);
     }
 
-    async getAllFiles() {
+    async getAllFiles(filter = {}, count = 100, offset = 0) {
         //искомая директория
         let dir = process.cwd() + this.#dir;
         //результируйщий объект
@@ -73,7 +75,36 @@ class Storage {
 
         arPromises = files.map(async file => {
             try {
-                return JSON.parse(await fs.readFile(dir + file, 'utf8'));
+                let result = JSON.parse(await fs.readFile(dir + file, 'utf8'));
+                let isset = false;
+                
+                if(Object.keys(filter).length > 0) {
+                    for(let key in filter) {
+                        let currentFilter = filter[key];
+                        let currentResult = result[key];
+                        console.log(key);
+                        
+                        if(currentResult instanceof Array) {
+
+                            let inArray = currentResult.findIndex(item => item == currentFilter);
+
+                            if(inArray != -1) {
+                                isset = true;
+                            }
+                        }
+                        else {
+                            if(currentFilter == currentResult)
+                                isset = true;
+                        }
+                    }  
+
+                    if(isset) {
+                        return result;
+                    }
+                }
+                else {
+                    return result;
+                }
             }
             catch(error) {
                 return error;
@@ -83,7 +114,11 @@ class Storage {
         try {
             //не более 100 файлов за 1 пакет
             const arResult = await Promise.all(arPromises); 
-            return arResult;
+            const prepareResult = arResult.map(item => {
+                if(item != undefined)
+                    return item; //todo: to fix
+            });
+            return prepareResult;
         }
         catch(error) {
             console.error(`Error processing group ${groupName}:`, error);

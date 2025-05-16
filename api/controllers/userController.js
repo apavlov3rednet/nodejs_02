@@ -12,10 +12,10 @@ class userController {
     }
 
     async getAllUsers() {        
-        if(Access.checkClientAccess(this.req.headers)) {
+        //if(Access.checkClientAccess(this.req.headers)) {
             return await this.reqUser.getUserList();
-        }
-        else return JSON.stringify({error: 'not access'});
+        //}
+        //else return JSON.stringify({error: 'not access'});
     }
 
     async getByLogin(login) {

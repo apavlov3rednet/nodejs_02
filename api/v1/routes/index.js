@@ -72,6 +72,13 @@ router.route('/group/:id/').delete(async (req, res) => {
 });
 
 //Проекты
+router.route('/project/filter/:userId/').get(async (req, res) => {
+    let project = new projectController(req, res);
+    let result = await project.getAllProjects(req);
+    res.send(result);
+});
+
+
 // получаем все группы
 router.route('/project/').get(async (req, res) => {
     let project = new projectController(req, res);
