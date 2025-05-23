@@ -5,8 +5,8 @@ class Base {
         this.project = new Storage('project');
     }
 
-    async getProjectList(filter, count = 100, offset = 0) {
-        return await this.project.getAllFiles(filter);
+    async getProjectList(filter = {}, count = 100, offset = 0) {
+        return await this.project.getAllFiles(filter, count, offset);
     }
 
     async getByFileName(name) {

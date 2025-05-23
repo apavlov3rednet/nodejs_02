@@ -18,7 +18,15 @@ class projectController {
       };
     }
 
-    return this.reqProject.getProjectList(filter);
+    let count = 100;
+    let offset = 0;
+
+    if(Object.keys(req.query).length > 0) {
+      count = req.query?.count || count;
+      offset = req.query?.offset || offset;
+    }
+
+    return this.reqProject.getProjectList(filter, count, offset);
   }
 
   async getByName(name) {

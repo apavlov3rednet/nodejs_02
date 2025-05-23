@@ -73,7 +73,23 @@ class Storage {
 
         let arPromises = [];
 
-        arPromises = files.map(async file => {
+        let start = 0;
+        files.forEach((item,index) => {
+            if(index < offset) {
+                delete files[index];
+            }
+            if(parseInt(start) > (parseInt(count)-1+parseInt(offset))) {
+                delete files[index];
+            }        
+            
+            start++;
+        });
+
+        files = files.filter(function (el) {
+            return (el != null && el != "" || el === 0);
+        });
+
+        arPromises = files.map(async (file, index) => {
             try {
                 let result = JSON.parse(await fs.readFile(dir + file, 'utf8'));
                 let isset = false;
@@ -82,7 +98,6 @@ class Storage {
                     for(let key in filter) {
                         let currentFilter = filter[key];
                         let currentResult = result[key];
-                        console.log(key);
                         
                         if(currentResult instanceof Array) {
 
@@ -114,14 +129,9 @@ class Storage {
         try {
             //не более 100 файлов за 1 пакет
             const arResult = await Promise.all(arPromises); 
-            const prepareResult = arResult.map(item => {
-                if(item != undefined)
-                    return item; //todo: to fix
-            });
-            return prepareResult;
+            return arResult;
         }
         catch(error) {
-            console.error(`Error processing group ${groupName}:`, error);
             throw error;
         }
     }

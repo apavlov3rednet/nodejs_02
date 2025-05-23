@@ -5,8 +5,8 @@ class Base {
         this.group = new Storage('group');
     }
 
-    async getGroupList(count = 100, offset = 0) {
-        return await this.group.getAllFiles();
+    async getGroupList(filter = {}, count = 100, offset = 0) {
+        return await this.group.getAllFiles(filter, count, offset);
     }
 
     async getMatrix(arGroup = []) {
