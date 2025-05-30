@@ -1,3 +1,8 @@
+const validator = {
+    phone: '', //"^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$"
+    email: "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+}
+
 const Model = {
     fields: {
         _id: {
@@ -8,7 +13,7 @@ const Model = {
         login: {
             type: 'string',
             important: true,
-            validator: '^d+$'
+            validator: ''
         },
         password: {
             type: 'string',
@@ -24,7 +29,12 @@ const Model = {
         phone: {
             type: 'string',
             important: false,
-            validator: this.validator.phone
+            validator: validator.phone
+        },
+        email: {
+            type: 'string',
+            important: true,
+            validator: validator.email
         }
     },
     rules : {
@@ -32,10 +42,6 @@ const Model = {
     },
     system : {
 
-    },
-    validator: {
-        phone: '',
-        email: ''
     }
 }
 

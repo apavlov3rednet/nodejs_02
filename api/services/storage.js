@@ -16,11 +16,11 @@ class Storage {
 
     #prepareFilePath(fileName, ext = true) {
         const secure = new Secure('md5');
-        const newFileName = secure.protectPassword(fileName);
+        this.newFileName = secure.protectPassword(fileName);
         let extFile = (ext) ? '.json' : '';
 
         fs.mkdir(path.join(process.cwd(), this.#dir), {recursive: true});
-        return path.join(process.cwd(), this.#dir, newFileName + extFile);
+        return path.join(process.cwd(), this.#dir, this.newFileName + extFile);
     }
 
     #writeToFile(nameFile, content) {
@@ -53,6 +53,8 @@ class Storage {
         }
 
         const nameFile = this.#prepareFilePath(fileName); //создаем путь файла
+
+        jsonData._id = this.newFileName;
         const content = JSON.stringify(jsonData); // s:{0:'name'}
 
         return this.#writeToFile(nameFile, content);

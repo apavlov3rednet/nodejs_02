@@ -3,11 +3,16 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "apidoc": "^1.2.0",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "nodemon": "^3.1.9",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^11.1.0"
+  },
+  "apidoc": {
+    "title": "Custom apiDoc browser title",
+    "url" : "https://api.github.com/v1"
   }
 }

@@ -1,4 +1,6 @@
 const Helper = require("../services/helper.js");
+const Model = require('../models/project.js');
+const ModelController = require('./modelController.js');
 
 class projectController {
   constructor(req, res) {
@@ -36,7 +38,16 @@ class projectController {
   }
 
   async createProject() {
-    return this.reqProject.set(this.req.body);
+    let request = this.req.body;
+    let mc = new ModelController(Model);
+    
+    mc.prepareDataByModel(request);
+    if(!mc.success()) {
+      console.error(mc.errors);
+      return mc.errors;
+    }
+
+    return this.reqProject.set(mc.prepareFields);
   }
 
   dropProject(login) {

@@ -33,14 +33,15 @@ class userController {
   async createUser() {
     let request = this.req.body;
     let mc = new ModelController(Model);
-    let obRequest = mc.prepareDataByModel(request);
+    
+    mc.prepareDataByModel(request);
 
-    if(Object.keys(obRequest.errors).length > 0) {
-      return false;
+    if(!mc.success()) {
+      console.error(mc.errors);
+      return mc.errors;
     }
-    else {
-      return this.reqUser.set(obRequest);
-    }
+
+    return this.reqUser.set(mc.prepareFields);
   }
 
   dropUser(login) {
